@@ -1,65 +1,26 @@
----
-title: QuickBooks Payments package
-keywords:
-last_updated: May 11, 2023
-tags: []
-summary: "Detailed description of the API of the QuickBooks Payments package."
----
-
-## Overview
-
-The QuickBooks Payments package allows you to interact with the QuickBooks Payments API.
-
-Some futures are:
-
-- Shortcuts for the REST API
-
-In most cases the provided helpers and events are enough, but if you need to
-use the QuickBooks Payments REST API you should go to their documentation for
-[API explorer](https://developer.intuit.com/app/developer/qbpayments/docs/api/resources/all-entities/bankaccounts).
-
-## Configuration
-
-To obtain the requested fields for configuration you need to log in to your intuit developer account and go to
-[Test connect to app (OAuth)](https://developer.intuit.com/v2/ui#/playground). On this page you need to:
-
-- Complete the form selecting the app you want to configure on the package.
-
-- Once you select the app the Client ID and Client Secret fields are being populated. You can copy this values to the package configuration.
-
-- Select the Scopes (make sure to select `Payments`).
-
-- Click on Get authorization code and authorize the app.
-
-- Then click on Get Tokens button.
-
-- Once you have the Tokens you can start making calls to the API. On this screen you need to access to the step 4 and copy
-  the Access Token, the Refresh Token and Minor Version to the package configuration. QuickBooks Online data services support
-  minor versions in order to provide a way for you to access incremental changes without breaking existing apps.
-
 # Javascript API
 
-The Javascript API of the quickbookspayments package has three pieces:
+The Javascript API of the quickbookspayments endpoint has three pieces:
 
 - **HTTP requests**: These allow to make regular HTTP requests.
 - **Shortcuts**: These are helpers to make HTTP request to the API in a more convenient way.
-- **Additional Helpers**: These helpers provide additional features that facilitate or improves the package usage in SLINGR.
+- **Additional Helpers**: These helpers provide additional features that facilitate or improves the endpoint usage in SLINGR.
 
 ## HTTP requests
-You can make `POST`,`DELETE`,`GET` requests to the [quickbookspayments API](https://developer.intuit.com/app/developer/qbpayments/docs/api/resources/all-entities/bankaccounts) like this:
+You can make `POST`,`DELETE`,`GET` requests to the [quickbookspayments API](API_URL_HERE) like this:
 ```javascript
-var response = pkg.quickbookspayments.post('/customers/:customerId/cards', body)
-var response = pkg.quickbookspayments.post('/customers/:customerId/cards')
+var response = pkg.quickbookspayments.post('/customers/:customerId/bank-accounts', body)
+var response = pkg.quickbookspayments.post('/customers/:customerId/bank-accounts')
 var response = pkg.quickbookspayments.delete('/customers/:customerId/bank-accounts/:accountId')
-var response = pkg.quickbookspayments.get('/customers/:customerId/bank-accounts')
+var response = pkg.quickbookspayments.get('/payments/echecks/:echeckId/refunds/:refundId')
 ```
 
-Please take a look at the documentation of the [HTTP package](https://github.com/slingr-stack/http-package#javascript-api)
+Please take a look at the documentation of the [HTTP endpoint](https://github.com/slingr-stack/http-endpoint#javascript-api)
 for more information about generic requests.
 
 ## Shortcuts
 
-Instead of having to use the generic HTTP methods, you can (and should) make use of the helpers provided in the package:
+Instead of having to use the generic HTTP methods, you can (and should) make use of the helpers provided in the endpoint:
 <details>
     <summary>Click here to see all the helpers</summary>
 
@@ -221,10 +182,10 @@ pkg.quickbookspayments.payments.echecks.get(echeckId)
 ---
 
 </details>
-
+    
 ## Flow Step
 
-As an alternative option to using scripts, you can make use of Flows and Flow Steps specifically created for the package:
+As an alternative option to using scripts, you can make use of Flows and Flow Steps specifically created for the endpoint: 
 <details>
     <summary>Click here to see the Flow Steps</summary>
 
@@ -234,7 +195,7 @@ As an alternative option to using scripts, you can make use of Flows and Flow St
 
 ### Generic Flow Step
 
-Generic flow step for full use of the entire package and its services.
+Generic flow step for full use of the entire endpoint and its services.
 
 <h3>Inputs</h3>
 
@@ -257,7 +218,7 @@ Generic flow step for full use of the entire package and its services.
         <td> - </td>
         <td>Always</td>
         <td>
-            This is the http method to be used against the package. <br>
+            This is the http method to be used against the endpoint. <br>
             Possible values are: <br>
             <i><strong>POST,DELETE,GET</strong></i>
         </td>
@@ -269,7 +230,7 @@ Generic flow step for full use of the entire package and its services.
         <td> - </td>
         <td>Always</td>
         <td>
-            The url to which this package will send the request. This is the exact service to which the http request will be made. <br>
+            The url to which this endpoint will send the request. This is the exact service to which the http request will be made. <br>
             Possible values are: <br>
             <i><strong>/customers/{customerId}/bank-accounts<br>/customers/{customerId}/bank-accounts/createFromToken<br>/customers/{customerId}/cards<br>/customers/{customerId}/cards/createFromToken<br>/payments/charges<br>/payments/charges/{chargeId}/refunds<br>/payments/charges/{chargeId}/capture<br>/payments/txn-requests/{chargeRequestId}/void<br>/payments/echecks<br>/payments/echecks/{echeckId}/refunds<br>/payments/tokens<br>/payments/tokens/ie<br>/customers/{customerId}/bank-accounts/{accountId}<br>/customers/{customerId}/cards/{cardId}<br>/customers/{customerId}/bank-accounts<br>/customers/{customerId}/bank-accounts/{accountId}<br>/customers/{customerId}/cards<br>/customers/{customerId}/cards/{cardId}<br>/payments/charges/{chargeId}/refunds/{refundId}<br>/payments/charges/{chargeId}<br>/payments/echecks/{echeckId}/refunds/{refundId}<br>/payments/echecks/{echeckId}<br></strong></i>
         </td>
@@ -378,7 +339,7 @@ Generic flow step for full use of the entire package and its services.
         <td>response</td>
         <td>object</td>
         <td>
-            Object resulting from the response to the package call.
+            Object resulting from the response to the endpoint call.
         </td>
     </tr>
     </tbody>
@@ -399,277 +360,14 @@ For more information about how shortcuts or flow steps works, and how they are g
 
 
 
-### Create Bank Account
+### Custom Flow Steps Name
 
-Creates a bank account for a customer in the quickbooks payments system.
+Description of Custom Flow Steps
 
-<h3>Inputs</h3>
+*MANUALLY ADD THE DOCUMENTATION OF THESE FLOW STEPS HERE...*
 
-<table>
-    <thead>
-    <tr>
-        <th>Label</th>
-        <th>Type</th>
-        <th>Required</th>
-        <th>Default</th>
-        <th>Visibility</th>
-        <th>Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>Costumer Id</td>
-        <td>text</td>
-        <td>yes</td>
-        <td> - </td>
-        <td>Always</td>
-        <td>
-            Id of the costumer to associate the bank account created.
-        </td>
-    </tr>
-    <tr>
-        <td>Account Type</td>
-        <td>choice</td>
-        <td>yes</td>
-        <td> - </td>
-        <td>Always</td>
-        <td>
-            Possible values are: <br>
-            <i><strong>Personal Checking<br> Personal Savings <br> Business Checking <br> Business Savings</strong></i>
-        </td>
-    </tr>
-    <tr>
-        <td>Name</td>
-        <td>text</td>
-        <td>no</td>
-        <td> - </td>
-        <td>Always</td>
-        <td>
-            Name to identify the bank account.
-        </td>
-    </tr>
-    <tr>
-        <td>Account Number</td>
-        <td>text</td>
-        <td>no</td>
-        <td> - </td>
-        <td>Always</td>
-        <td>
-            The account number for the bank account.
-        </td>
-    </tr>
-    <tr>
-        <td>Routing Number</td>
-        <td>text</td>
-        <td>no</td>
-        <td> - </td>
-        <td>Always</td>
-        <td>
-            The routing number for the bank account.
-        </td>
-    </tr>
-    <tr>
-        <td>Phone</td>
-        <td>text</td>
-        <td>no</td>
-        <td> false </td>
-        <td>Always</td>
-        <td>
-            The phone number to associate to the bank account.
-        </td>
-    </tr>
-    </tbody>
-</table>
-
-<h3>Outputs</h3>
-
-<table>
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>response</td>
-        <td>object</td>
-        <td>
-            Object resulting from the response to the package call.
-        </td>
-    </tr>
-    </tbody>
-</table>
-
-
-### Create Card
-
-Creates a card for a customer in the quickbooks payments system.
-
-<h3>Inputs</h3>
-
-<table>
-    <thead>
-    <tr>
-        <th>Label</th>
-        <th>Type</th>
-        <th>Required</th>
-        <th>Default</th>
-        <th>Visibility</th>
-        <th>Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>Costumer Id</td>
-        <td>text</td>
-        <td>yes</td>
-        <td> - </td>
-        <td>Always</td>
-        <td>
-            Id of the costumer to associate the bank account created.
-        </td>
-    </tr>
-    <tr>
-        <td>Number of the card</td>
-        <td>text</td>
-        <td>yes</td>
-        <td> - </td>
-        <td>Always</td>
-        <td>
-            Number of the card to create. Without spaces or dashes.
-        </td>
-    </tr>
-    <tr>
-        <td>Expiration Mouth</td>
-        <td>choice</td>
-        <td>no</td>
-        <td> - </td>
-        <td>Always</td>
-        <td>
-            Number of the mouth of the expiration date of the card.
-        </td>
-    </tr>
-    <tr>
-        <td>Expiration Year</td>
-        <td> number </td>
-        <td>no</td>
-        <td> - </td>
-        <td>Always</td>
-        <td>
-            Year of the expiration date of the card. 2 digits.
-        </td>
-    </tr>
-    <tr>
-        <td>CVC</td>
-        <td> number </td>
-        <td>no</td>
-        <td> - </td>
-        <td>Always</td>
-        <td>
-            Number of the CVC of the card.
-        </td>
-    </tr>
-    </tbody>
-</table>
-
-<h3>Outputs</h3>
-
-<table>
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>response</td>
-        <td>object</td>
-        <td>
-            Object resulting from the response to the package call.
-        </td>
-    </tr>
-    </tbody>
-</table>
 
 </details>
 
-
-### Create Token for Quickbooks Payments
-
-Creates a token for a card or a bank in the quickbooks payments system.
-
-<h3>Inputs</h3>
-
-<table>
-    <thead>
-    <tr>
-        <th>Label</th>
-        <th>Type</th>
-        <th>Required</th>
-        <th>Default</th>
-        <th>Visibility</th>
-        <th>Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>Bank Account</td>
-        <td> number </td>
-        <td>no</td>
-        <td> - </td>
-        <td> if Card is not set. </td>
-        <td>
-              Id of the bank account to create the token.
-        </td>
-    </tr>
-    <tr>
-        <td>Card</td>
-        <td> number </td>
-        <td>no</td>
-        <td> - </td>
-        <td> if Bank Account is not set. </td>
-        <td>
-             Id of the card to create the token.
-        </td>
-    </tr>
-    </tbody>
-</table>
-
-<h3>Outputs</h3>
-
-<table>
-    <thead>
-    <tr>
-        <th>Name</th>
-        <th>Type</th>
-        <th>Description</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>response</td>
-        <td>object</td>
-        <td>
-            Object resulting from the response to the package call.
-        </td>
-    </tr>
-    </tbody>
-</table>
-
 ## Additional Helpers
 *MANUALLY ADD THE DOCUMENTATION OF THESE HELPERS HERE...*
-
-## About SLINGR
-
-SLINGR is a low-code rapid application development platform that accelerates development, with robust architecture for integrations and executing custom workflows and automation.
-
-[More info about SLINGR](https://slingr.io)
-
-## License
-
-This package is licensed under the Apache License 2.0. See the `LICENSE` file for more details.
-

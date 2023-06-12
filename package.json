@@ -1,0 +1,103 @@
+{
+    "name": "quickbookspayments",
+    "label": "Quickbookspayments Package",
+    "dependencies": [
+        {
+            "type": "service",
+            "name": "http",
+            "version": "v1.1.5",
+            "instanceId": "shared"
+        }
+    ],
+    "configuration": [
+        {
+            "name": "clientId",
+            "label": "Client ID",
+            "type": "text",
+            "required": true
+        },
+        {
+            "name": "clientSecret",
+            "label": "Client Secret",
+            "type": "text",
+            "required": true
+        },
+        {
+            "name": "accessToken",
+            "label": "Access Token",
+            "type": "text",
+            "required": true
+        },
+        {
+            "name": "refreshToken",
+            "label": "Refresh Token",
+            "type": "text",
+            "required": true
+        },
+        {
+            "name": "quickBooksEnvironment",
+            "label": "QuickBooks environment",
+            "type": "buttonsGroup",
+            "required": true,
+            "defaultValue": "SANDBOX",
+            "typeOptions": {
+                "allowCustom": true,
+                "possibleValues": [
+                    {
+                        "label": "Sandbox",
+                        "name": "SANDBOX"
+                    },
+                    {
+                        "label": "Production",
+                        "name": "PRODUCTION"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "verifierToken",
+            "label": "Webhooks Verifier Token",
+            "type": "text",
+            "required": false
+        }
+    ],
+    "events": [
+        {
+            "label": "Webhook",
+            "name": "webhook",
+            "description": "Notifications from QuickBooks about entities"
+        }
+    ],
+    "metadata": [
+        {
+            "type": "script",
+            "namespace": "api",
+            "path": "/scripts/functions.js"
+        },
+        {
+            "type": "listener",
+            "namespace": "webhook",
+            "path": "/listeners/listeners.js"
+        },
+        {
+            "type": "flowStep",
+            "namespace": "steps",
+            "path": "/flowSteps/apiCallQuickbookspayments"
+        },
+        {
+            "type": "flowStep",
+            "namespace": "steps",
+            "path": "/flowSteps/createBankAccountQuickbookspayments"
+        },
+        {
+            "type": "flowStep",
+            "namespace": "steps",
+            "path": "/flowSteps/createCardQuickbookspayments"
+        },
+        {
+            "type": "flowStep",
+            "namespace": "steps",
+            "path": "/flowSteps/createTokenQuickbookspayments"
+        }
+    ]
+}
