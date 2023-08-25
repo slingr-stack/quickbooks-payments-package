@@ -2,7 +2,36 @@
  Dependencies
  ****************************************************/
 
-var httpService = svc.http;
+var httpReference = dependencies.http;
+
+var httpDependency = {
+    get: httpReference.get,
+    post: httpReference.post,
+    put: httpReference.put,
+    patch: httpReference.patch,
+    delete: httpReference.delete,
+    head: httpReference.head,
+    options: httpReference.options
+};
+var httpService = {};
+
+function handleRequestWithRetry(requestFn, options, callbackData, callbacks) {
+    try {
+        return requestFn(options, callbackData, callbacks);
+    } catch (error) {
+        sys.logs.info("[quickbookspayments] Handling request "+JSON.stringify(error));
+    }
+}
+
+function createWrapperFunction(requestFn) {
+    return function(options, callbackData, callbacks) {
+        return handleRequestWithRetry(requestFn, options, callbackData, callbacks);
+    };
+}
+
+for (var key in httpDependency) {
+    if (typeof httpDependency[key] === 'function') httpService[key] = createWrapperFunction(httpDependency[key]);
+}
 
 /****************************************************
  Helpers
@@ -46,12 +75,7 @@ exports.customers.bankAccounts.post = function(customerId, httpOptions) {
     var url = parse('/customers/:customerId/bank-accounts', [customerId]);
     sys.logs.debug('[quickbookspayments] POST from: ' + url);
     var options = checkHttpOptions(url, httpOptions);
-    try {
-        return httpService.post(Quickbookspayments(options));
-    } catch (error) {
-        refreshQuickBooksToken();
-        return httpService.post(Quickbookspayments(options));
-    }
+    return httpService.post(QuickbooksPayments(options));
 };
 
 exports.customers.bankAccounts.createFromToken.post = function(customerId, httpOptions) {
@@ -62,12 +86,7 @@ exports.customers.bankAccounts.createFromToken.post = function(customerId, httpO
     var url = parse('/customers/:customerId/bank-accounts/createFromToken', [customerId]);
     sys.logs.debug('[quickbookspayments] POST from: ' + url);
     var options = checkHttpOptions(url, httpOptions);
-    try {
-        return httpService.post(Quickbookspayments(options));
-    } catch (error) {
-        refreshQuickBooksToken();
-        return httpService.post(Quickbookspayments(options));
-    }
+    return httpService.post(QuickbooksPayments(options));
 };
 
 exports.customers.bankAccounts.delete = function(customerId, accountId, httpOptions) {
@@ -78,12 +97,7 @@ exports.customers.bankAccounts.delete = function(customerId, accountId, httpOpti
     var url = parse('/customers/:customerId/bank-accounts/:accountId', [customerId, accountId]);
     sys.logs.debug('[quickbookspayments] DELETE from: ' + url);
     var options = checkHttpOptions(url, httpOptions);
-    try {
-        return httpService.delete(Quickbookspayments(options));
-    } catch (error) {
-        refreshQuickBooksToken();
-        return httpService.delete(Quickbookspayments(options));
-    }
+    return httpService.delete(QuickbooksPayments(options));
 };
 
 exports.customers.bankAccounts.get = function(customerId, accountId, httpOptions) {
@@ -109,12 +123,7 @@ exports.customers.bankAccounts.get = function(customerId, accountId, httpOptions
     }
     sys.logs.debug('[quickbookspayments] GET from: ' + url);
 	var options = checkHttpOptions(url, httpOptions);
-    try {
-        return httpService.get(Quickbookspayments(options));
-    } catch (error) {
-        refreshQuickBooksToken();
-        return httpService.get(Quickbookspayments(options));
-    }
+	return httpService.get(QuickbooksPayments(options));
 };
 
 exports.customers.cards.post = function(customerId, httpOptions) {
@@ -125,12 +134,7 @@ exports.customers.cards.post = function(customerId, httpOptions) {
     var url = parse('/customers/:customerId/cards', [customerId]);
     sys.logs.debug('[quickbookspayments] POST from: ' + url);
     var options = checkHttpOptions(url, httpOptions);
-    try {
-        return httpService.post(Quickbookspayments(options));
-    } catch (error) {
-        refreshQuickBooksToken();
-        return httpService.post(Quickbookspayments(options));
-    }
+    return httpService.post(QuickbooksPayments(options));
 };
 
 exports.customers.cards.createFromToken.post = function(customerId, httpOptions) {
@@ -141,12 +145,7 @@ exports.customers.cards.createFromToken.post = function(customerId, httpOptions)
     var url = parse('/customers/:customerId/cards/createFromToken', [customerId]);
     sys.logs.debug('[quickbookspayments] POST from: ' + url);
     var options = checkHttpOptions(url, httpOptions);
-    try {
-        return httpService.post(Quickbookspayments(options));
-    } catch (error) {
-        refreshQuickBooksToken();
-        return httpService.post(Quickbookspayments(options));
-    }
+    return httpService.post(QuickbooksPayments(options));
 };
 
 exports.customers.cards.delete = function(customerId, cardId, httpOptions) {
@@ -157,12 +156,7 @@ exports.customers.cards.delete = function(customerId, cardId, httpOptions) {
     var url = parse('/customers/:customerId/cards/:cardId', [customerId, cardId]);
     sys.logs.debug('[quickbookspayments] DELETE from: ' + url);
     var options = checkHttpOptions(url, httpOptions);
-    try {
-        return httpService.delete(Quickbookspayments(options));
-    } catch (error) {
-        refreshQuickBooksToken();
-        return httpService.delete(Quickbookspayments(options));
-    }
+    return httpService.delete(QuickbooksPayments(options));
 };
 
 exports.customers.cards.get = function(customerId, cardId, httpOptions) {
@@ -188,24 +182,14 @@ exports.customers.cards.get = function(customerId, cardId, httpOptions) {
     }
     sys.logs.debug('[quickbookspayments] GET from: ' + url);
 	var options = checkHttpOptions(url, httpOptions);
-    try {
-        return httpService.get(Quickbookspayments(options));
-    } catch (error) {
-        refreshQuickBooksToken();
-        return httpService.get(Quickbookspayments(options));
-    }
+	return httpService.get(QuickbooksPayments(options));
 };
 
 exports.payments.charges.post = function(httpOptions) {
     var url = parse('/payments/charges');
     sys.logs.debug('[quickbookspayments] POST from: ' + url);
     var options = checkHttpOptions(url, httpOptions);
-    try {
-        return httpService.post(Quickbookspayments(options));
-    } catch (error) {
-        refreshQuickBooksToken();
-        return httpService.post(Quickbookspayments(options));
-    }
+    return httpService.post(QuickbooksPayments(options));
 };
 
 exports.payments.charges.refunds.get = function(chargeId, refundId, httpOptions) {
@@ -216,12 +200,7 @@ exports.payments.charges.refunds.get = function(chargeId, refundId, httpOptions)
     var url = parse('/payments/charges/:chargeId/refunds/:refundId', [chargeId, refundId]);
     sys.logs.debug('[quickbookspayments] GET from: ' + url);
     var options = checkHttpOptions(url, httpOptions);
-    try {
-        return httpService.get(Quickbookspayments(options));
-    } catch (error) {
-        refreshQuickBooksToken();
-        return httpService.get(Quickbookspayments(options));
-    }
+    return httpService.get(QuickbooksPayments(options));
 };
 
 exports.payments.charges.get = function(chargeId, httpOptions) {
@@ -232,12 +211,7 @@ exports.payments.charges.get = function(chargeId, httpOptions) {
     var url = parse('/payments/charges/:chargeId', [chargeId]);
     sys.logs.debug('[quickbookspayments] GET from: ' + url);
     var options = checkHttpOptions(url, httpOptions);
-    try {
-        return httpService.get(Quickbookspayments(options));
-    } catch (error) {
-        refreshQuickBooksToken();
-        return httpService.get(Quickbookspayments(options));
-    }
+    return httpService.get(QuickbooksPayments(options));
 };
 
 exports.payments.charges.refunds.post = function(chargeId, httpOptions) {
@@ -248,12 +222,7 @@ exports.payments.charges.refunds.post = function(chargeId, httpOptions) {
     var url = parse('/payments/charges/:chargeId/refunds', [chargeId]);
     sys.logs.debug('[quickbookspayments] POST from: ' + url);
     var options = checkHttpOptions(url, httpOptions);
-    try {
-        return httpService.post(Quickbookspayments(options));
-    } catch (error) {
-        refreshQuickBooksToken();
-        return httpService.post(Quickbookspayments(options));
-    }
+    return httpService.post(QuickbooksPayments(options));
 };
 
 exports.payments.charges.capture.post = function(chargeId, httpOptions) {
@@ -264,12 +233,7 @@ exports.payments.charges.capture.post = function(chargeId, httpOptions) {
     var url = parse('/payments/charges/:chargeId/capture', [chargeId]);
     sys.logs.debug('[quickbookspayments] POST from: ' + url);
     var options = checkHttpOptions(url, httpOptions);
-    try {
-        return httpService.post(Quickbookspayments(options));
-    } catch (error) {
-        refreshQuickBooksToken();
-        return httpService.post(Quickbookspayments(options));
-    }
+    return httpService.post(QuickbooksPayments(options));
 };
 
 exports.payments.txnRequests.void.post = function(chargeRequestId, httpOptions) {
@@ -280,24 +244,14 @@ exports.payments.txnRequests.void.post = function(chargeRequestId, httpOptions) 
     var url = parse('/payments/txn-requests/:chargeRequestId/void', [chargeRequestId]);
     sys.logs.debug('[quickbookspayments] POST from: ' + url);
     var options = checkHttpOptions(url, httpOptions);
-    try {
-        return httpService.post(Quickbookspayments(options));
-    } catch (error) {
-        refreshQuickBooksToken();
-        return httpService.post(Quickbookspayments(options));
-    }
+    return httpService.post(QuickbooksPayments(options));
 };
 
 exports.payments.echecks.post = function(httpOptions) {
     var url = parse('/payments/echecks');
     sys.logs.debug('[quickbookspayments] POST from: ' + url);
     var options = checkHttpOptions(url, httpOptions);
-    try {
-        return httpService.post(Quickbookspayments(options));
-    } catch (error) {
-        refreshQuickBooksToken();
-        return httpService.post(Quickbookspayments(options));
-    }
+    return httpService.post(QuickbooksPayments(options));
 };
 
 exports.payments.echecks.refunds.get = function(echeckId, refundId, httpOptions) {
@@ -308,12 +262,7 @@ exports.payments.echecks.refunds.get = function(echeckId, refundId, httpOptions)
     var url = parse('/payments/echecks/:echeckId/refunds/:refundId', [echeckId, refundId]);
     sys.logs.debug('[quickbookspayments] GET from: ' + url);
     var options = checkHttpOptions(url, httpOptions);
-    try {
-        return httpService.get(Quickbookspayments(options));
-    } catch (error) {
-        refreshQuickBooksToken();
-        return httpService.get(Quickbookspayments(options));
-    }
+    return httpService.get(QuickbooksPayments(options));
 };
 
 exports.payments.echecks.get = function(echeckId, httpOptions) {
@@ -324,12 +273,7 @@ exports.payments.echecks.get = function(echeckId, httpOptions) {
     var url = parse('/payments/echecks/:echeckId', [echeckId]);
     sys.logs.debug('[quickbookspayments] GET from: ' + url);
     var options = checkHttpOptions(url, httpOptions);
-    try {
-        return httpService.get(Quickbookspayments(options));
-    } catch (error) {
-        refreshQuickBooksToken();
-        return httpService.get(Quickbookspayments(options));
-    }
+    return httpService.get(QuickbooksPayments(options));
 };
 
 exports.payments.echecks.refunds.post = function(echeckId, httpOptions) {
@@ -340,36 +284,21 @@ exports.payments.echecks.refunds.post = function(echeckId, httpOptions) {
     var url = parse('/payments/echecks/:echeckId/refunds', [echeckId]);
     sys.logs.debug('[quickbookspayments] POST from: ' + url);
     var options = checkHttpOptions(url, httpOptions);
-    try {
-        return httpService.post(Quickbookspayments(options));
-    } catch (error) {
-        refreshQuickBooksToken();
-        return httpService.post(Quickbookspayments(options));
-    }
+    return httpService.post(QuickbooksPayments(options));
 };
 
 exports.payments.tokens.post = function(httpOptions) {
     var url = parse('/payments/tokens');
     sys.logs.debug('[quickbookspayments] POST from: ' + url);
     var options = checkHttpOptions(url, httpOptions);
-    try {
-        return httpService.post(Quickbookspayments(options));
-    } catch (error) {
-        refreshQuickBooksToken();
-        return httpService.post(Quickbookspayments(options));
-    }
+    return httpService.post(QuickbooksPayments(options));
 };
 
 exports.payments.tokens.ie.post = function(httpOptions) {
     var url = parse('/payments/tokens/ie');
     sys.logs.debug('[quickbookspayments] POST from: ' + url);
     var options = checkHttpOptions(url, httpOptions);
-    try {
-        return httpService.post(Quickbookspayments(options));
-    } catch (error) {
-        refreshQuickBooksToken();
-        return httpService.post(Quickbookspayments(options));
-    }
+    return httpService.post(QuickbooksPayments(options));
 };
 
 /****************************************************
@@ -378,72 +307,37 @@ exports.payments.tokens.ie.post = function(httpOptions) {
 
 exports.get = function(url, httpOptions, callbackData, callbacks) {
     var options = checkHttpOptions(url, httpOptions);
-    try {
-        return httpService.get(Quickbookspayments(options), callbackData, callbacks);
-    } catch (error) {
-        refreshQuickBooksToken();
-        return httpService.get(Quickbookspayments(options), callbackData, callbacks);
-    }
+    return httpService.get(QuickbooksPayments(options), callbackData, callbacks);
 };
 
 exports.post = function(url, httpOptions, callbackData, callbacks) {
     var options = checkHttpOptions(url, httpOptions);
-    try {
-        return httpService.post(Quickbookspayments(options), callbackData, callbacks);
-    } catch (error) {
-        refreshQuickBooksToken();
-        return httpService.post(Quickbookspayments(options), callbackData, callbacks);
-    }
+    return httpService.post(QuickbooksPayments(options), callbackData, callbacks);
 };
 
 exports.put = function(url, httpOptions, callbackData, callbacks) {
     var options = checkHttpOptions(url, httpOptions);
-    try {
-        return httpService.put(Quickbookspayments(options), callbackData, callbacks);
-    } catch (error) {
-        refreshQuickBooksToken();
-        return httpService.put(Quickbookspayments(options), callbackData, callbacks);
-    }
+    return httpService.put(QuickbooksPayments(options), callbackData, callbacks);
 };
 
 exports.patch = function(url, httpOptions, callbackData, callbacks) {
     var options = checkHttpOptions(url, httpOptions);
-    try {
-        return httpService.patch(Quickbookspayments(options), callbackData, callbacks);
-    } catch (error) {
-        refreshQuickBooksToken();
-        return httpService.patch(Quickbookspayments(options), callbackData, callbacks);
-    }
+    return httpService.patch(QuickbooksPayments(options), callbackData, callbacks);
 };
 
 exports.delete = function(url, httpOptions, callbackData, callbacks) {
     var options = checkHttpOptions(url, httpOptions);
-    try {
-        return httpService.delete(Quickbookspayments(options), callbackData, callbacks);
-    } catch (error) {
-        refreshQuickBooksToken();
-        return httpService.delete(Quickbookspayments(options), callbackData, callbacks);
-    }
+    return httpService.delete(QuickbooksPayments(options), callbackData, callbacks);
 };
 
 exports.head = function(url, httpOptions, callbackData, callbacks) {
     var options = checkHttpOptions(url, httpOptions);
-    try {
-        return httpService.head(Quickbookspayments(options), callbackData, callbacks);
-    } catch (error) {
-        refreshQuickBooksToken();
-        return httpService.head(Quickbookspayments(options), callbackData, callbacks);
-    }
+    return httpService.head(QuickbooksPayments(options), callbackData, callbacks);
 };
 
 exports.options = function(url, httpOptions, callbackData, callbacks) {
     var options = checkHttpOptions(url, httpOptions);
-    try {
-        return httpService.options(Quickbookspayments(options), callbackData, callbacks);
-    } catch (error) {
-        refreshQuickBooksToken();
-        return httpService.options(Quickbookspayments(options), callbackData, callbacks);
-    }
+    return httpService.options(QuickbooksPayments(options), callbackData, callbacks);
 };
 
 exports.utils = {};
@@ -496,13 +390,14 @@ exports.utils.fromMillisToDate = function(params) {
     return null;
 };
 
+exports.utils.getConfiguration = function (property) {
+    sys.logs.debug('[quickbookspayments] Get property: '+property);
+    return config.get(property);
+};
+
 /****************************************************
  Private helpers
  ****************************************************/
-
-var concatQuery = function (url, key, value) {
-    return url + ((!url || url.indexOf('?') < 0) ? '?' : '&') + key + "=" + value;
-}
 
 var checkHttpOptions = function (url, options) {
     options = options || {};
@@ -512,7 +407,7 @@ var checkHttpOptions = function (url, options) {
             options = url || {};
         } else {
             if (!!options.path || !!options.params || !!options.body) {
-                // options contains the http package format
+                // options contain the http package format
                 options.path = url;
             } else {
                 // create html package
@@ -537,7 +432,7 @@ var parse = function (str) {
         if (arguments.length > 1) {
             var args = arguments[1], i = 0;
             return str.replace(/(:(?:\w|-)+)/g, () => {
-                if (typeof (args[i]) != 'string') throw new Error('Invalid type of argument: [' + args[i] + '] for url [' + str + '].');
+                if (typeof (args[i]) != 'string' && typeof (args[i]) != 'number') throw new Error('Invalid type of argument: [' + args[i] + '] for url [' + str + '].');
                 return args[i++];
             });
         } else {
@@ -553,33 +448,10 @@ var parse = function (str) {
 }
 
 /****************************************************
- Constants
- ****************************************************/
-
-
-var QUICKBOOKSPAYMENTS_API_BASE_URL = "https://api.intuit.com/quickbooks/v4";
-var QUICKBOOKSPAYMENTS_API_BASE_URL_SANDBOX = "https://sandbox.api.intuit.com/quickbooks/v4";
-
-/****************************************************
  Configurator
  ****************************************************/
 
-var accessToken, refreshToken, verifierToken;
-var userId = sys.context.getCurrentUserRecord().id();
-var Quickbookspayments = function (options) {
-    var lastToken = sys.storage.get("_LAST_TOKEN");
-    if (lastToken != null) {
-        accessToken = lastToken;
-        refreshToken = sys.storage.get(accessToken);
-        verifierToken = sys.storage.get(refreshToken);
-    } else {
-        accessToken = config.get("accessToken");
-        refreshToken = config.get("refreshToken");
-        verifierToken = config.get("verifierToken");
-        sys.storage.put("accessToken" + userId, accessToken);
-        sys.storage.put("refreshToken" + userId, refreshToken);
-        sys.storage.put("verifierToken" + userId, verifierToken);
-    }
+var QuickbooksPayments = function (options) {
     options = options || {};
     options= setApiUri(options);
     options= setRequestHeaders(options);
@@ -591,9 +463,11 @@ var Quickbookspayments = function (options) {
  ****************************************************/
 
 function setApiUri(options) {
+    var QUICKBOOKSPAYMENTS_API_BASE_URL = "https://api.intuit.com/quickbooks/v4";
+    var QUICKBOOKSPAYMENTS_API_BASE_URL_SANDBOX = "https://sandbox.api.intuit.com/quickbooks/v4";
+    var API_URL = config.get("quickBooksEnvironment") === "PRODUCTION" ? QUICKBOOKSPAYMENTS_API_BASE_URL : QUICKBOOKSPAYMENTS_API_BASE_URL_SANDBOX;
     var url = options.path || "";
-    var apiUrl = config.get("quickBooksEnvironment") === "PRODUCTION" ? QUICKBOOKSPAYMENTS_API_BASE_URL : QUICKBOOKSPAYMENTS_API_BASE_URL_SANDBOX;
-    options.url = apiUrl + url;
+    options.url = API_URL + url;
     sys.logs.debug('[quickbookspayments] Set url: ' + options.path + "->" + options.url);
     return options;
 }
@@ -603,20 +477,9 @@ function setRequestHeaders(options) {
     headers = mergeJSON(headers, {"Authorization": "Bearer" + accessToken});
     headers = mergeJSON(headers, {"Content-Type": "application/json"});
     headers = mergeJSON(headers, {"Accept": "application/json"});
+
     options.headers = headers;
     return options;
-}
-
-function mergeJSON (json1, json2) {
-    const result = {};
-    var key;
-    for (key in json1) {
-        if(json1.hasOwnProperty(key)) result[key] = json1[key];
-    }
-    for (key in json2) {
-        if(json2.hasOwnProperty(key)) result[key] = json2[key];
-    }
-    return result;
 }
 
 function refreshQuickBooksToken() {
@@ -635,4 +498,17 @@ function refreshQuickBooksToken() {
     });
     sys.storage.put('access_token', refreshTokenResponse.access_token);
     sys.storage.put('refresh_token', refreshTokenResponse.refresh_token);
+}
+
+
+function mergeJSON (json1, json2) {
+    const result = {};
+    var key;
+    for (key in json1) {
+        if(json1.hasOwnProperty(key)) result[key] = json1[key];
+    }
+    for (key in json2) {
+        if(json2.hasOwnProperty(key)) result[key] = json2[key];
+    }
+    return result;
 }

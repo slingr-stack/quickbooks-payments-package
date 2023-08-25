@@ -1,3 +1,9 @@
+/****************************************************
+ Dependencies
+ ****************************************************/
+
+var httpService = dependencies.http;
+
 step.createTokenQuickbookspayments = function (inputs) {
 
 	var inputsLogic = {

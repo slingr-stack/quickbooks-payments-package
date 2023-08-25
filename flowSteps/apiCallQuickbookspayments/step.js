@@ -1,3 +1,9 @@
+/****************************************************
+ Dependencies
+ ****************************************************/
+
+var httpService = dependencies.http;
+
 /**
  * This flow step will send generic request.
  *
@@ -14,7 +20,7 @@
  * {number} connectionTimeout, Read timeout interval, in milliseconds.
  * {number} readTimeout, Connect timeout interval, in milliseconds.
  */
-step.apiCall = function (inputs) {
+step.apiCallQuickbookspayments = function (inputs) {
 
 	var inputsLogic = {
 		headers: inputs.headers || [],
@@ -37,9 +43,11 @@ step.apiCall = function (inputs) {
 	inputsLogic.params = isObject(inputsLogic.params) ? inputsLogic.params : stringToObject(inputsLogic.params);
 	inputsLogic.body = isObject(inputsLogic.body) ? inputsLogic.body : JSON.parse(inputsLogic.body);
 
-
+	var QUICKBOOKSPAYMENTS_API_BASE_URL = "https://api.intuit.com/quickbooks/v4";
+	var QUICKBOOKSPAYMENTS_API_BASE_URL_SANDBOX = "https://sandbox.api.intuit.com/quickbooks/v4";
+	var API_URL = config.get("quickBooksEnvironment") === "PRODUCTION" ? QUICKBOOKSPAYMENTS_API_BASE_URL : QUICKBOOKSPAYMENTS_API_BASE_URL_SANDBOX;
 	var options = {
-		path: parse(inputsLogic.url.urlValue, inputsLogic.url.paramsValue),
+		url: API_URL + parse(inputsLogic.url.urlValue, inputsLogic.url.paramsValue),
 		params: inputsLogic.params,
 		headers: inputsLogic.headers,
 		body: inputsLogic.body,
@@ -54,23 +62,23 @@ step.apiCall = function (inputs) {
 
 	switch (inputsLogic.method.toLowerCase()) {
 		case 'get':
-			return endpoint._get(options);
+			return httpService.get(options);
 		case 'post':
-			return endpoint._post(options);
+			return httpService.post(options);
 		case 'delete':
-			return endpoint._delete(options);
+			return httpService.delete(options);
 		case 'put':
-			return endpoint._put(options);
+			return httpService.put(options);
 		case 'connect':
-			return endpoint._connect(options);
+			return httpService.connect(options);
 		case 'head':
-			return endpoint._head(options);
+			return httpService.head(options);
 		case 'options':
-			return endpoint._options(options);
+			return httpService.options(options);
 		case 'patch':
-			return endpoint._patch(options);
+			return httpService.patch(options);
 		case 'trace':
-			return endpoint._trace(options);
+			return httpService.trace(options);
 	}
 
 	//REPLACE THIS WITH YOUR OWN CODE

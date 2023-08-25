@@ -5,7 +5,7 @@
         {
             "type": "service",
             "name": "http",
-            "version": "v1.1.5",
+            "version": "v1.2.6",
             "instanceId": "shared"
         }
     ],
@@ -59,6 +59,12 @@
             "label": "Webhooks Verifier Token",
             "type": "text",
             "required": false
+        },
+        {
+            "name": "QUICKBOOKSPAYMENTS_API_BASE_URL",
+            "label": "Quickbookspayments Api Url",
+            "type": "label",
+            "value": "https://api.intuit.com/quickbooks/v4"
         }
     ],
     "events": [
@@ -73,11 +79,6 @@
             "type": "script",
             "namespace": "api",
             "path": "/scripts/functions.js"
-        },
-        {
-            "type": "listener",
-            "namespace": "webhook",
-            "path": "/listeners/listeners.js"
         },
         {
             "type": "flowStep",

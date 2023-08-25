@@ -1,3 +1,9 @@
+/****************************************************
+ Dependencies
+ ****************************************************/
+
+var httpService = dependencies.http;
+
 step.createBankAccountQuickbookspayments = function (inputs) {
 
 	var inputsLogic = {
