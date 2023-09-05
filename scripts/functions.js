@@ -20,6 +20,7 @@ function handleRequestWithRetry(requestFn, options, callbackData, callbacks) {
         return requestFn(options, callbackData, callbacks);
     } catch (error) {
         sys.logs.info("[quickbookspayments] Handling request "+JSON.stringify(error));
+        refreshQuickBooksToken();
     }
 }
 
@@ -474,7 +475,7 @@ function setApiUri(options) {
 
 function setRequestHeaders(options) {
     var headers = options.headers || {};
-    headers = mergeJSON(headers, {"Authorization": "Bearer" + accessToken});
+    headers = mergeJSON(headers, {"Authorization": "Bearer" + config.get("accessToken")});
     headers = mergeJSON(headers, {"Content-Type": "application/json"});
     headers = mergeJSON(headers, {"Accept": "application/json"});
 
@@ -483,7 +484,7 @@ function setRequestHeaders(options) {
 }
 
 function refreshQuickBooksToken() {
-    refreshTokenResponse = svc.http.post({
+    var refreshTokenResponse = svc.http.post({
         url: "https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer",
         headers: {
             "Accept": "application/json",
@@ -493,11 +494,15 @@ function refreshQuickBooksToken() {
             client_id: config.get("clientId"),
             client_secret: config.get("clientSecret"),
             grant_type: "refresh_token",
-            refresh_token: refreshToken
+            refresh_token: config.get("refreshToken")
+        },
+        authorization: {
+            type: "basic",
+            username: config.get("accessToken"),
+            password: config.get("refreshToken")
         }
     });
-    sys.storage.put('access_token', refreshTokenResponse.access_token);
-    sys.storage.put('refresh_token', refreshTokenResponse.refresh_token);
+    config.set("accessToken", refreshTokenResponse.accessToken);
 }
 
 
