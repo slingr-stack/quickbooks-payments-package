@@ -475,7 +475,7 @@ function setApiUri(options) {
 
 function setRequestHeaders(options) {
     var headers = options.headers || {};
-    headers = mergeJSON(headers, {"Authorization": "Bearer" + config.get("accessToken")});
+    headers = mergeJSON(headers, {"Authorization": "Bearer " + config.get("accessToken")});
     headers = mergeJSON(headers, {"Content-Type": "application/json"});
     headers = mergeJSON(headers, {"Accept": "application/json"});
 
@@ -484,7 +484,7 @@ function setRequestHeaders(options) {
 }
 
 function refreshQuickBooksToken() {
-    var refreshTokenResponse = svc.http.post({
+    var refreshTokenResponse = dependencies.http.post({
         url: "https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer",
         headers: {
             "Accept": "application/json",
