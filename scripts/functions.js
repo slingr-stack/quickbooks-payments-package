@@ -456,6 +456,7 @@ var QuickbooksPayments = function (options) {
     options = options || {};
     options= setApiUri(options);
     options= setRequestHeaders(options);
+    options= setAuthorization(options);
     return options;
 }
 
@@ -475,11 +476,22 @@ function setApiUri(options) {
 
 function setRequestHeaders(options) {
     var headers = options.headers || {};
-    headers = mergeJSON(headers, {"Authorization": "Bearer " + config.get("accessToken")});
     headers = mergeJSON(headers, {"Content-Type": "application/json"});
     headers = mergeJSON(headers, {"Accept": "application/json"});
 
     options.headers = headers;
+    return options;
+}
+
+function setAuthorization(options) {
+    sys.logs.debug('[quickbooks] Setting header token oauth');
+    var authorization = options.authorization || {};
+    authorization = mergeJSON(authorization, {
+        type: "oauth2",
+        accessToken: config.get("accessToken"),
+        headerPrefix: "Bearer"
+    });
+    options.authorization = authorization;
     return options;
 }
 
