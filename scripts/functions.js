@@ -452,7 +452,10 @@ var parse = function (str) {
  Configurator
  ****************************************************/
 
+var init = true;
+
 var QuickbooksPayments = function (options) {
+    if (init) { refreshQuickBooksToken(); init= false;}
     options = options || {};
     options= setApiUri(options);
     options= setRequestHeaders(options);
@@ -496,25 +499,22 @@ function setAuthorization(options) {
 }
 
 function refreshQuickBooksToken() {
-    var refreshTokenResponse = dependencies.http.post({
+    var refreshTokenResponse = httpService.post({
         url: "https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer",
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/x-www-form-urlencoded"
         },
-        body: {
-            client_id: config.get("clientId"),
-            client_secret: config.get("clientSecret"),
-            grant_type: "refresh_token",
-            refresh_token: config.get("refreshToken")
-        },
+        body: {"grant_type":"refresh_token","refresh_token" : config.get("refreshToken")},
         authorization: {
             type: "basic",
-            username: config.get("accessToken"),
-            password: config.get("refreshToken")
+            username: config.get("clientId"),
+            password: config.get("clientSecret")
         }
     });
-    config.set("accessToken", refreshTokenResponse.accessToken);
+    sys.logs.debug('[quickbooks] Refresh token response: ' + JSON.stringify(refreshTokenResponse));
+    _config.set("accessToken", refreshTokenResponse.access_token);
+    _config.set("refreshToken", refreshTokenResponse.refresh_token);
 }
 
 
