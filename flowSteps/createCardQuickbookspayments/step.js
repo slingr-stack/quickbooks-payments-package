@@ -14,14 +14,22 @@ step.createCardQuickbookspayments = function (inputs) {
 		cvc: inputs.cvc || 0
 	};
 
+	var QUICKBOOKSPAYMENTS_API_BASE_URL = "https://api.intuit.com/quickbooks/v4";
+	var QUICKBOOKSPAYMENTS_API_BASE_URL_SANDBOX = "https://sandbox.api.intuit.com/quickbooks/v4";
+	var API_URL = config.get("quickBooksEnvironment") === "PRODUCTION" ? QUICKBOOKSPAYMENTS_API_BASE_URL : QUICKBOOKSPAYMENTS_API_BASE_URL_SANDBOX;
+
 	var options = {
 		body: {
 			number: inputsLogic.number,
 			expMonth: inputsLogic.expMonth,
 			expYear: inputsLogic.expYear,
 			cvc: inputsLogic.cvc
-		}
+		},
+		url: API_URL + "/customers/" + inputsLogic.costumerId + "/cards"
 	}
 
-	return endpoint.customers.cards.post(inputsLogic.costumerId, options)
+	options= setRequestHeaders(options);
+	options= setAuthorization(options);
+
+	return httpService.post(options)
 };

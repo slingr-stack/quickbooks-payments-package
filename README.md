@@ -1,4 +1,4 @@
-<table>
+<table class="table" style="margin-top: 10px">
     <thead>
     <tr>
         <th>Title</th>
@@ -9,7 +9,7 @@
     <tbody>
     <tr>
         <td>Quickbooks Payments Package</td>
-        <td>August 25, 2023</td>
+        <td>November 15, 2023</td>
         <td>Detailed description of the API of the Quickbooks Payments Package.</td>
     </tr>
     </tbody>
@@ -23,7 +23,7 @@ Some futures are:
 
 - Shortcuts for the REST API
 
-In most cases the provided helpers and events are enough, but if you need to
+In most cases, the provided helpers and events are enough, but if you need to
 use the QuickBooks Payments REST API you should go to their documentation for
  [API explorer](https://developer.intuit.com/app/developer/qbpayments/docs/api/resources/all-entities/bankaccounts).
 
@@ -48,188 +48,22 @@ To obtain the requested fields for configuration you need to log in to your intu
 
 # Javascript API
 
-The Javascript API of the quickbookspayments package has three pieces:
+The Javascript API of the quickbookspayments package has two pieces:
 
-- **HTTP requests**: These allow making regular HTTP requests.
-- **Shortcuts**: These are helpers to make HTTP request to the API in a more convenient way.
-- **Additional Helpers**: These helpers provide additional features that facilitate or improves the package usage in SLINGR.
+- **HTTP requests**
+- **Flow steps**
 
 ## HTTP requests
 You can make `POST`,`DELETE`,`GET` requests to the [quickbookspayments API](https://developer.intuit.com/app/developer/qbpayments/docs/api/resources/all-entities/bankaccounts) like this:
 ```javascript
-var response = pkg.quickbookspayments.functions.post('/payments/txn-requests/:chargeRequestId/void', body)
-var response = pkg.quickbookspayments.functions.post('/payments/txn-requests/:chargeRequestId/void')
-var response = pkg.quickbookspayments.functions.delete('/customers/:customerId/cards/:cardId')
-var response = pkg.quickbookspayments.functions.get('/customers/:customerId/cards')
+var response = pkg.quickbookspayments.api.post('/payments/txn-requests/:chargeRequestId/void', body)
+var response = pkg.quickbookspayments.api.post('/payments/txn-requests/:chargeRequestId/void')
+var response = pkg.quickbookspayments.api.delete('/customers/:customerId/cards/:cardId')
+var response = pkg.quickbookspayments.api.get('/customers/:customerId/cards')
 ```
 
 Please take a look at the documentation of the [HTTP service](https://github.com/slingr-stack/http-service)
 for more information about generic requests.
-
-## Shortcuts
-
-Instead of having to use the generic HTTP methods, you can (and should) make use of the helpers provided in the package:
-<details>
-    <summary>Click here to see all the helpers</summary>
-
-<br>
-
-* API URL: '/customers/:customerId/bank-accounts'
-* HTTP Method: 'POST'
-* More info: https://developer.intuit.com/app/developer/qbpayments/docs/api/resources/all-entities/bankaccounts
-```javascript
-pkg.quickbookspayments.functions.customers.bankAccounts.post(customerId, body)
-```
----
-* API URL: '/customers/:customerId/bank-accounts'
-* HTTP Method: 'GET'
-* More info: https://developer.intuit.com/app/developer/qbpayments/docs/api/resources/all-entities/bankaccounts
-```javascript
-pkg.quickbookspayments.functions.customers.bankAccounts.get()
-```
----
-* API URL: '/customers/:customerId/cards'
-* HTTP Method: 'POST'
-* More info: https://developer.intuit.com/app/developer/qbpayments/docs/api/resources/all-entities/bankaccounts
-```javascript
-pkg.quickbookspayments.functions.customers.cards.post(customerId, body)
-```
----
-* API URL: '/customers/:customerId/cards'
-* HTTP Method: 'GET'
-* More info: https://developer.intuit.com/app/developer/qbpayments/docs/api/resources/all-entities/bankaccounts
-```javascript
-pkg.quickbookspayments.functions.customers.cards.get()
-```
----
-* API URL: '/customers/:customerId/bank-accounts/:accountId'
-* HTTP Method: 'DELETE'
-* More info: https://developer.intuit.com/app/developer/qbpayments/docs/api/resources/all-entities/bankaccounts
-```javascript
-pkg.quickbookspayments.functions.customers.bankAccounts.delete(customerId, accountId)
-```
----
-* API URL: '/customers/:customerId/bank-accounts/:accountId'
-* HTTP Method: 'GET'
-* More info: https://developer.intuit.com/app/developer/qbpayments/docs/api/resources/all-entities/bankaccounts
-```javascript
-pkg.quickbookspayments.functions.customers.bankAccounts.get(customerId)
-```
----
-* API URL: '/customers/:customerId/bank-accounts/createFromToken'
-* HTTP Method: 'POST'
-* More info: https://developer.intuit.com/app/developer/qbpayments/docs/api/resources/all-entities/bankaccounts
-```javascript
-pkg.quickbookspayments.functions.customers.bankAccounts.createFromToken.post(customerId, body)
-```
----
-* API URL: '/customers/:customerId/cards/:cardId'
-* HTTP Method: 'DELETE'
-* More info: https://developer.intuit.com/app/developer/qbpayments/docs/api/resources/all-entities/bankaccounts
-```javascript
-pkg.quickbookspayments.functions.customers.cards.delete(customerId, cardId)
-```
----
-* API URL: '/customers/:customerId/cards/:cardId'
-* HTTP Method: 'GET'
-* More info: https://developer.intuit.com/app/developer/qbpayments/docs/api/resources/all-entities/bankaccounts
-```javascript
-pkg.quickbookspayments.functions.customers.cards.get(customerId)
-```
----
-* API URL: '/customers/:customerId/cards/createFromToken'
-* HTTP Method: 'POST'
-* More info: https://developer.intuit.com/app/developer/qbpayments/docs/api/resources/all-entities/bankaccounts
-```javascript
-pkg.quickbookspayments.functions.customers.cards.createFromToken.post(customerId, body)
-```
----
-* API URL: '/payments/charges'
-* HTTP Method: 'POST'
-* More info: https://developer.intuit.com/app/developer/qbpayments/docs/api/resources/all-entities/bankaccounts
-```javascript
-pkg.quickbookspayments.functions.payments.charges.post(body)
-```
----
-* API URL: '/payments/echecks'
-* HTTP Method: 'POST'
-* More info: https://developer.intuit.com/app/developer/qbpayments/docs/api/resources/all-entities/bankaccounts
-```javascript
-pkg.quickbookspayments.functions.payments.echecks.post(body)
-```
----
-* API URL: '/payments/tokens'
-* HTTP Method: 'POST'
-* More info: https://developer.intuit.com/app/developer/qbpayments/docs/api/resources/all-entities/bankaccounts
-```javascript
-pkg.quickbookspayments.functions.payments.tokens.post(body)
-```
----
-* API URL: '/payments/charges/:chargeId'
-* HTTP Method: 'GET'
-* More info: https://developer.intuit.com/app/developer/qbpayments/docs/api/resources/all-entities/bankaccounts
-```javascript
-pkg.quickbookspayments.functions.payments.charges.get(chargeId)
-```
----
-* API URL: '/payments/echecks/:echeckId'
-* HTTP Method: 'GET'
-* More info: https://developer.intuit.com/app/developer/qbpayments/docs/api/resources/all-entities/bankaccounts
-```javascript
-pkg.quickbookspayments.functions.payments.echecks.get(echeckId)
-```
----
-* API URL: '/payments/tokens/ie'
-* HTTP Method: 'POST'
-* More info: https://developer.intuit.com/app/developer/qbpayments/docs/api/resources/all-entities/bankaccounts
-```javascript
-pkg.quickbookspayments.functions.payments.tokens.ie.post(body)
-```
----
-* API URL: '/payments/charges/:chargeId/capture'
-* HTTP Method: 'POST'
-* More info: https://developer.intuit.com/app/developer/qbpayments/docs/api/resources/all-entities/bankaccounts
-```javascript
-pkg.quickbookspayments.functions.payments.charges.capture.post(chargeId, body)
-```
----
-* API URL: '/payments/charges/:chargeId/refunds'
-* HTTP Method: 'POST'
-* More info: https://developer.intuit.com/app/developer/qbpayments/docs/api/resources/all-entities/bankaccounts
-```javascript
-pkg.quickbookspayments.functions.payments.charges.refunds.post(chargeId, body)
-```
----
-* API URL: '/payments/echecks/:echeckId/refunds'
-* HTTP Method: 'POST'
-* More info: https://developer.intuit.com/app/developer/qbpayments/docs/api/resources/all-entities/bankaccounts
-```javascript
-pkg.quickbookspayments.functions.payments.echecks.refunds.post(echeckId, body)
-```
----
-* API URL: '/payments/txn-requests/:chargeRequestId/void'
-* HTTP Method: 'POST'
-* More info: https://developer.intuit.com/app/developer/qbpayments/docs/api/resources/all-entities/bankaccounts
-```javascript
-pkg.quickbookspayments.functions.payments.txnRequests.void.post(chargeRequestId, body)
-```
----
-* API URL: '/payments/charges/:chargeId/refunds/:refundId'
-* HTTP Method: 'GET'
-* More info: https://developer.intuit.com/app/developer/qbpayments/docs/api/resources/all-entities/bankaccounts
-```javascript
-pkg.quickbookspayments.functions.payments.charges.refunds.get(chargeId, refundId)
-```
----
-* API URL: '/payments/echecks/:echeckId/refunds/:refundId'
-* HTTP Method: 'GET'
-* More info: https://developer.intuit.com/app/developer/qbpayments/docs/api/resources/all-entities/bankaccounts
-```javascript
-pkg.quickbookspayments.functions.payments.echecks.refunds.get(echeckId, refundId)
-```
----
-
-</details>
 
 ## Flow Step
 
@@ -238,8 +72,6 @@ As an alternative option to using scripts, you can make use of Flows and Flow St
     <summary>Click here to see the Flow Steps</summary>
 
 <br>
-
-
 
 ### Generic Flow Step
 
@@ -668,9 +500,6 @@ Creates a token for a card or a bank in the quickbooks payments system.
     </tr>
     </tbody>
 </table>
-
-## Additional Helpers
-*MANUALLY ADD THE DOCUMENTATION OF THESE HELPERS HERE...*
 
 ## Dependencies
 * HTTP Service (Latest Version)

@@ -77,27 +77,27 @@
     "metadata": [
         {
             "type": "script",
-            "namespace": "functions",
-            "path": "/scripts/functions.js"
+            "namespace": "api",
+            "path": "/scripts/api.js"
         },
         {
             "type": "flowStep",
-            "namespace": "steps",
+            "namespace": "apiCallQuickbookspayments",
             "path": "/flowSteps/apiCallQuickbookspayments"
         },
         {
             "type": "flowStep",
-            "namespace": "steps",
+            "namespace": "createBankAccountQuickbookspayments",
             "path": "/flowSteps/createBankAccountQuickbookspayments"
         },
         {
             "type": "flowStep",
-            "namespace": "steps",
+            "namespace": "createCardQuickbookspayments",
             "path": "/flowSteps/createCardQuickbookspayments"
         },
         {
             "type": "flowStep",
-            "namespace": "steps",
+            "namespace": "createTokenQuickbookspayments",
             "path": "/flowSteps/createTokenQuickbookspayments"
         }
     ]
